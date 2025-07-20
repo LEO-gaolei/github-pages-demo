@@ -5,31 +5,26 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write   # 👈 给 workflow 写入权限
+
 jobs:
-  build-deploy:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 拉取代码
+      - name: Checkout
         uses: actions/checkout@v3
 
-      - name: 安装 Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-
-      - name: 安装依赖
+      - name: Install dependencies
         run: npm install
-
-      - name: 构建项目
-        run: npm run build
 
       - name: Set Git Identity
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          
-      - name: 部署到 GitHub Pages
-        run: npm run deploy
+
+      - name: Deploy to GitHub Pages
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}   # 👈 自动注入的 token，无需手动配置
+        run: npm run deploy
