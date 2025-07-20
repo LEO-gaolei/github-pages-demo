@@ -24,6 +24,11 @@ jobs:
       - name: 构建项目
         run: npm run build
 
+      - name: Set Git Identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
       - name: 部署到 GitHub Pages
         run: npm run deploy
         env:
